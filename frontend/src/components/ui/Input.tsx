@@ -1,10 +1,7 @@
 import React from 'react';
 
 interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
-  label?: string;
-  error?: string;
-  hint?: string;
-  icon?: React.ReactNode;
+  label?: string; error?: string; hint?: string; icon?: React.ReactNode;
 }
 
 export default function Input({ label, error, hint, icon, className = '', id, ...props }: InputProps) {
@@ -12,20 +9,20 @@ export default function Input({ label, error, hint, icon, className = '', id, ..
   return (
     <div className="w-full">
       {label && (
-        <label htmlFor={inputId} className="block text-sm font-medium text-gray-700 mb-1">
+        <label htmlFor={inputId} className="block text-xs font-semibold text-gray-400 uppercase tracking-wider mb-1.5">
           {label}
         </label>
       )}
       <div className="relative">
-        {icon && <div className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">{icon}</div>}
+        {icon && <div className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-500">{icon}</div>}
         <input
           id={inputId}
-          className={`w-full rounded-lg border ${error ? 'border-red-400 focus:ring-red-400' : 'border-gray-300 focus:ring-green-500'} focus:border-transparent focus:ring-2 outline-none px-3 py-2 text-sm text-gray-900 placeholder-gray-400 transition ${icon ? 'pl-10' : ''} ${className}`}
+          className={`input-dark ${error ? '!border-red-500/60 focus:!border-red-400' : ''} ${icon ? 'pl-10' : ''} ${className}`}
           {...props}
         />
       </div>
-      {error && <p className="mt-1 text-xs text-red-600">{error}</p>}
-      {hint && !error && <p className="mt-1 text-xs text-gray-500">{hint}</p>}
+      {error && <p className="mt-1.5 text-xs text-red-400">{error}</p>}
+      {hint && !error && <p className="mt-1.5 text-xs text-gray-500">{hint}</p>}
     </div>
   );
 }

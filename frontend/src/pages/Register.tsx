@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
-import { Package2, AlertCircle } from 'lucide-react';
+import { Package2, AlertCircle, Zap } from 'lucide-react';
 import { authService } from '../services/auth';
 import { useAuth } from '../context/AuthContext';
 import Button from '../components/ui/Button';
@@ -13,27 +13,19 @@ export default function Register() {
   const { login } = useAuth();
   const [params] = useSearchParams();
   const isDemo = params.get('demo') === '1';
-
-  const [form, setForm] = useState({
-    full_name: '', email: '', password: '', user_type: 'farmer',
-    organization: '', phone_number: '',
-  });
+  const [form, setForm] = useState({ full_name: '', email: '', password: '', user_type: 'farmer', organization: '', phone_number: '' });
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
-  // Auto-fill demo data
   useEffect(() => {
-    if (isDemo) {
-      setForm(f => ({ ...f, full_name: 'Demo User', email: 'demo@packsmart.ai', password: 'Demo@123456', user_type: 'food_processor', organization: 'PackSmart Demo' }));
-    }
+    if (isDemo) setForm(f => ({ ...f, full_name: 'Demo User', email: 'demo@packsmart.ai', password: 'Demo@123456', user_type: 'food_processor', organization: 'PackSmart Demo' }));
   }, [isDemo]);
 
   const set = (k: string) => (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) =>
     setForm(f => ({ ...f, [k]: e.target.value }));
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setError(''); setLoading(true);
+    e.preventDefault(); setError(''); setLoading(true);
     try {
       await authService.register({ ...form, user_type: form.user_type as any });
       await login(form.email, form.password);
@@ -44,24 +36,27 @@ export default function Register() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-900 via-blue-800 to-green-700 flex items-center justify-center px-4 py-10">
-      <div className="w-full max-w-lg">
+    <div className="min-h-screen bg-mesh flex items-center justify-center px-4 py-10 relative overflow-hidden">
+      <div className="orb w-96 h-96 bg-brand-500/15 -top-32 -right-20" />
+      <div className="orb w-72 h-72 bg-accent-500/10 bottom-10 -left-20" />
+
+      <div className="relative w-full max-w-lg animate-slide-up">
         <div className="text-center mb-8">
-          <div className="w-14 h-14 bg-white rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg">
-            <Package2 className="w-8 h-8 text-green-600" />
+          <div className="w-16 h-16 bg-gradient-to-br from-brand-500 to-accent-500 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-neon-green">
+            <Package2 className="w-9 h-9 text-white" />
           </div>
-          <h1 className="text-2xl font-bold text-white">Create Your Account</h1>
-          <p className="text-blue-200 mt-1">Start getting AI packaging recommendations</p>
+          <h1 className="text-3xl font-black text-white">Create Account</h1>
+          <p className="text-gray-500 mt-1">Start getting AI packaging recommendations</p>
         </div>
 
-        <div className="bg-white rounded-2xl shadow-2xl p-8">
+        <div className="glass-lg rounded-3xl p-8 border border-white/10">
           {isDemo && (
-            <div className="bg-green-50 border border-green-200 text-green-800 px-4 py-3 rounded-lg mb-6 text-sm">
-              🚀 Demo mode — form pre-filled. Click Register to continue.
+            <div className="flex items-center gap-2 bg-brand-500/10 border border-brand-500/20 text-brand-400 px-4 py-3 rounded-xl mb-5 text-sm">
+              <Zap className="w-4 h-4" /> Demo mode — form pre-filled. Click Register to continue.
             </div>
           )}
           {error && (
-            <div className="flex items-center gap-2 bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg mb-6 text-sm">
+            <div className="flex items-center gap-2 bg-red-500/10 border border-red-500/20 text-red-400 px-4 py-3 rounded-xl mb-5 text-sm">
               <AlertCircle className="w-4 h-4" />{error}
             </div>
           )}
@@ -76,7 +71,7 @@ export default function Register() {
           </form>
           <p className="text-center text-sm text-gray-500 mt-6">
             Already have an account?{' '}
-            <Link to="/login" className="text-green-600 font-medium hover:underline">Sign in</Link>
+            <Link to="/login" className="text-brand-400 font-semibold hover:text-brand-300 transition">Sign in</Link>
           </p>
         </div>
       </div>

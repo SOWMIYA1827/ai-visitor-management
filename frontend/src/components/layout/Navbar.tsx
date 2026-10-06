@@ -1,75 +1,82 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Package, Menu, X, User, LogOut, LayoutDashboard } from 'lucide-react';
+import { Package2, Menu, X, User, LogOut, LayoutDashboard, Zap } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 
 export default function Navbar() {
   const { isAuthenticated, user, logout } = useAuth();
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
-
   const handleLogout = () => { logout(); navigate('/'); };
 
   return (
-    <nav className="bg-white border-b border-gray-200 sticky top-0 z-50 shadow-sm">
+    <nav className="sticky top-0 z-50 glass border-b border-white/[0.06]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
-          <Link to="/" className="flex items-center gap-2">
-            <div className="w-8 h-8 bg-green-600 rounded-lg flex items-center justify-center">
-              <Package className="w-5 h-5 text-white" />
+          {/* Logo */}
+          <Link to="/" className="flex items-center gap-2.5 group">
+            <div className="w-9 h-9 bg-gradient-to-br from-brand-500 to-accent-500 rounded-xl flex items-center justify-center shadow-neon-green group-hover:scale-105 transition-transform">
+              <Package2 className="w-5 h-5 text-white" />
             </div>
-            <div>
-              <span className="font-bold text-gray-900 text-lg">PackSmart</span>
-              <span className="font-bold text-green-600 text-lg"> AI</span>
+            <div className="leading-tight">
+              <span className="font-black text-white text-lg">Pack</span>
+              <span className="font-black text-gradient text-lg">Smart AI</span>
             </div>
           </Link>
 
-          {/* Desktop nav */}
-          <div className="hidden md:flex items-center gap-6">
+          {/* Desktop */}
+          <div className="hidden md:flex items-center gap-1">
             {!isAuthenticated ? (
               <>
-                <Link to="/#how-it-works" className="text-sm text-gray-600 hover:text-green-600 transition">How It Works</Link>
-                <Link to="/login" className="text-sm text-gray-600 hover:text-green-600 transition">Login</Link>
-                <Link to="/register" className="bg-green-600 text-white text-sm px-4 py-2 rounded-lg hover:bg-green-700 transition">Get Started</Link>
+                <Link to="/#how-it-works" className="text-sm text-gray-400 hover:text-white px-3 py-2 rounded-lg hover:bg-white/5 transition">How It Works</Link>
+                <Link to="/login" className="text-sm text-gray-400 hover:text-white px-3 py-2 rounded-lg hover:bg-white/5 transition">Login</Link>
+                <Link to="/register" className="btn-glow text-white text-sm px-4 py-2 rounded-xl font-semibold flex items-center gap-1.5">
+                  <Zap className="w-3.5 h-3.5" /> Get Started
+                </Link>
               </>
             ) : (
               <>
-                <Link to="/dashboard" className="text-sm text-gray-600 hover:text-green-600 transition flex items-center gap-1"><LayoutDashboard className="w-4 h-4" />Dashboard</Link>
-                <Link to="/recommend" className="text-sm text-gray-600 hover:text-green-600 transition">New Recommendation</Link>
-                {user?.is_admin && <Link to="/admin" className="text-sm text-gray-600 hover:text-green-600 transition">Admin</Link>}
-                <div className="flex items-center gap-2 pl-4 border-l border-gray-200">
-                  <div className="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center">
-                    <User className="w-4 h-4 text-green-700" />
+                <Link to="/dashboard" className="text-sm text-gray-400 hover:text-white px-3 py-2 rounded-lg hover:bg-white/5 transition flex items-center gap-1.5">
+                  <LayoutDashboard className="w-3.5 h-3.5" />Dashboard
+                </Link>
+                <Link to="/recommend" className="text-sm text-gray-400 hover:text-white px-3 py-2 rounded-lg hover:bg-white/5 transition">Recommend</Link>
+                {user?.is_admin && (
+                  <Link to="/admin" className="text-sm text-yellow-400 hover:text-yellow-300 px-3 py-2 rounded-lg hover:bg-yellow-400/5 transition">Admin</Link>
+                )}
+                <div className="flex items-center gap-2 pl-3 ml-2 border-l border-white/10">
+                  <div className="w-8 h-8 bg-gradient-to-br from-brand-500/30 to-accent-500/30 border border-brand-500/30 rounded-full flex items-center justify-center">
+                    <span className="text-brand-400 font-bold text-sm">{user?.full_name?.charAt(0).toUpperCase()}</span>
                   </div>
-                  <span className="text-sm font-medium text-gray-700">{user?.full_name?.split(' ')[0]}</span>
-                  <button onClick={handleLogout} className="text-gray-400 hover:text-red-500 transition ml-1"><LogOut className="w-4 h-4" /></button>
+                  <span className="text-sm font-medium text-gray-300">{user?.full_name?.split(' ')[0]}</span>
+                  <button onClick={handleLogout} className="text-gray-500 hover:text-red-400 transition ml-1 p-1 rounded-lg hover:bg-red-500/10">
+                    <LogOut className="w-4 h-4" />
+                  </button>
                 </div>
               </>
             )}
           </div>
 
-          {/* Mobile toggle */}
-          <button className="md:hidden text-gray-600" onClick={() => setOpen(!open)}>
-            {open ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+          <button className="md:hidden text-gray-400 hover:text-white p-2 rounded-lg hover:bg-white/5" onClick={() => setOpen(!open)}>
+            {open ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
           </button>
         </div>
       </div>
 
-      {/* Mobile menu */}
       {open && (
-        <div className="md:hidden bg-white border-t border-gray-100 px-4 py-3 space-y-2">
+        <div className="md:hidden glass-lg border-t border-white/[0.06] px-4 py-3 space-y-1">
           {!isAuthenticated ? (
             <>
-              <Link to="/login" className="block py-2 text-sm text-gray-700" onClick={() => setOpen(false)}>Login</Link>
-              <Link to="/register" className="block py-2 text-sm text-green-600 font-medium" onClick={() => setOpen(false)}>Get Started</Link>
+              <Link to="/login" className="block py-2.5 px-3 text-sm text-gray-300 hover:text-white rounded-lg hover:bg-white/5" onClick={() => setOpen(false)}>Login</Link>
+              <Link to="/register" className="block py-2.5 px-3 text-sm text-brand-400 font-semibold rounded-lg hover:bg-brand-500/10" onClick={() => setOpen(false)}>Get Started</Link>
             </>
           ) : (
             <>
-              <Link to="/dashboard" className="block py-2 text-sm text-gray-700" onClick={() => setOpen(false)}>Dashboard</Link>
-              <Link to="/recommend" className="block py-2 text-sm text-gray-700" onClick={() => setOpen(false)}>New Recommendation</Link>
-              <Link to="/history" className="block py-2 text-sm text-gray-700" onClick={() => setOpen(false)}>History</Link>
-              {user?.is_admin && <Link to="/admin" className="block py-2 text-sm text-gray-700" onClick={() => setOpen(false)}>Admin</Link>}
-              <button onClick={handleLogout} className="block py-2 text-sm text-red-600 w-full text-left">Logout</button>
+              {['/dashboard', '/recommend', '/history', '/compare'].map(path => (
+                <Link key={path} to={path} className="block py-2.5 px-3 text-sm text-gray-300 hover:text-white rounded-lg hover:bg-white/5 capitalize" onClick={() => setOpen(false)}>
+                  {path.replace('/', '')}
+                </Link>
+              ))}
+              <button onClick={handleLogout} className="block w-full text-left py-2.5 px-3 text-sm text-red-400 hover:text-red-300 rounded-lg hover:bg-red-500/10">Logout</button>
             </>
           )}
         </div>

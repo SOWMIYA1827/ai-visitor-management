@@ -255,7 +255,7 @@ def list_recommendations(
     )
     result = []
     for rec in recs:
-        food_name = rec.food_profile.name if rec.food_profile else None
+        food_name = rec.food_profile.food_name if rec.food_profile else None
         mat_name = rec.primary_material.name if rec.primary_material else None
         result.append(RecommendationListItem(
             id=rec.id,
